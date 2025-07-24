@@ -1,12 +1,38 @@
-# React + Vite
+# Sol_Faucet 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Solana-based airdrop application built with React and Vite. It enables users to request test SOL (or other tokens) in a streamlined UI—perfect for developers and testers working on Solana programs.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🧩 Key Features
 
-## Expanding the ESLint configuration
+- **Testnet Faucet**: A convenient way to dispense test SOL for development purposes.
+- **Modern Frontend**: Built with React and Vite for fast load times and hot module replacement.
+- **Clean Codebase**: ESLint configuration included for code quality and consistency.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🧰 Tech Stack
+
+| Component        | Technology                 |
+|------------------|---------------------------|
+| Frontend         | React                     |
+| Bundler          | Vite                      |
+| Linter           | ESLint                    |
+| Styling          | HTML / CSS                |
+| JavaScript       | ES6+                      |
+
+---
+
+## 🚀 Live Demo
+
+Try it out here: [sol-faucet-beta.vercel.app](https://sol-faucet-beta.vercel.app)
+
+---
+
+## 📦 Installation
+
+1. **Clone the repo**  
+   ```bash
+   git clone https://github.com/desmond009/Sol_Faucet.git
+   cd Sol_Faucet
