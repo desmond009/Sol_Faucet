@@ -7,6 +7,7 @@ import WalletInfo from './components/WalletInfo';
 import AirdropForm from './components/AirdropForm';
 import TransferForm from './components/TransferForm';
 import Transactions from './components/Transactions';
+import { Transaction, SystemProgram, PublicKey } from '@solana/web3.js';
 
 function App() {
   const [tab, setTab] = useState('transfer');
@@ -16,12 +17,12 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const { connection } = useConnection();
-  const { publicKey, connected } = useWallet();
+  const { publicKey, sendTransaction } = useWallet();
 
   // Update balance when wallet changes or connects
   useEffect(() => {
     async function fetchBalance() {
-      if (connected && publicKey) {
+      if (publicKey) {
         const bal = await connection.getBalance(publicKey);
         setBalance(bal / LAMPORTS_PER_SOL);
       } else {
@@ -29,21 +30,35 @@ function App() {
       }
     }
     fetchBalance();
-  }, [connected, publicKey, connection]);
+  }, [publicKey, connection]);
 
   // Clear fields on wallet disconnect
   useEffect(() => {
-    if (!connected) {
+    if (!publicKey) {
       setAirdropAddress('');
       setAirdropAmount('');
       setMessage(null);
     }
-  }, [connected]);
+  }, [publicKey]);
 
   // Placeholder for transfer logic
-  const handleTransfer = (e) => {
-    e.preventDefault();
-    setMessage({ type: 'success', text: 'Transfer successful!' });
+  const handleTransfer = async (to, amount) => {
+    setLoading(true);
+    setMessage(null);
+    try {
+      const transaction = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: publicKey,
+          toPubkey: new PublicKey(to),
+          lamports: parseFloat(amount) * LAMPORTS_PER_SOL,
+        })
+      );
+      await sendTransaction(transaction, connection);
+      setMessage({ type: 'success', text: 'Transfer successful!' });
+    } catch (e) {
+      setMessage({ type: 'error', text: e.message });
+    }
+    setLoading(false);
   };
 
   // Airdrop logic
@@ -64,7 +79,7 @@ function App() {
     setLoading(false);
   };
 
-  const accountAddress = connected && publicKey ? publicKey.toBase58() : '';
+  const accountAddress = publicKey ? publicKey.toBase58() : '';
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -99,7 +114,12 @@ function App() {
           </div>
           {/* Tab Panels */}
           <div className="bg-white border rounded-lg p-6">
-            {tab === 'transfer' && <TransferForm />}
+            {tab === 'transfer' && 
+              <TransferForm 
+                onTransfer={handleTransfer} 
+                loading={loading} 
+                message={message} 
+              />}
             {tab === 'airdrop' && (
               <AirdropForm
                 address={airdropAddress}
